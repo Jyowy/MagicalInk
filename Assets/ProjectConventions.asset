@@ -1,0 +1,243 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20f95166e2494704dbbd2c8e461c1d13, type: 3}
+  m_Name: ProjectConventions
+  m_EditorClassIdentifier: 
+  ignoreRules:
+  - prefix: 
+    contains: test
+    suffix: 
+    labels: []
+    enforcementLevel: 0
+    typeFilter: 0
+  - prefix: 
+    contains: Packages
+    suffix: 
+    labels: []
+    enforcementLevel: 0
+    typeFilter: 0
+  namingRules:
+  - prefix: T_
+    contains: 
+    suffix: 
+    labels:
+    - texture
+    enforcementLevel: 3
+    typeFilter: 3
+  - prefix: T_C_
+    contains: 
+    suffix: 
+    labels:
+    - texture
+    - albedo
+    enforcementLevel: 0
+    typeFilter: 3
+  - prefix: T_N_
+    contains: 
+    suffix: 
+    labels:
+    - texture
+    - normalMap
+    enforcementLevel: 0
+    typeFilter: 3
+  - prefix: T_E_
+    contains: 
+    suffix: 
+    labels:
+    - texture
+    - emissive
+    enforcementLevel: 0
+    typeFilter: 3
+  - prefix: T_M_
+    contains: 
+    suffix: 
+    labels:
+    - texture
+    - mask
+    enforcementLevel: 0
+    typeFilter: 3
+  - prefix: T_R_
+    contains: 
+    suffix: 
+    labels:
+    - texture
+    - roughness
+    enforcementLevel: 0
+    typeFilter: 3
+  - prefix: T_MT_
+    contains: 
+    suffix: 
+    labels:
+    - texture
+    - metallic
+    enforcementLevel: 0
+    typeFilter: 3
+  - prefix: T_RMT_
+    contains: 
+    suffix: 
+    labels:
+    - texture
+    - roughness
+    - metallic
+    enforcementLevel: 0
+    typeFilter: 3
+  - prefix: T_D_
+    contains: 
+    suffix: 
+    labels:
+    - texture
+    - displacement
+    enforcementLevel: 0
+    typeFilter: 3
+  - prefix: T_AO_
+    contains: 
+    suffix: 
+    labels:
+    - texture
+    - ambientOcclusion
+    enforcementLevel: 0
+    typeFilter: 3
+  - prefix: T_F_
+    contains: 
+    suffix: 
+    labels:
+    - texture
+    - flowMap
+    enforcementLevel: 0
+    typeFilter: 3
+  - prefix: T_UI_
+    contains: 
+    suffix: 
+    labels:
+    - texture
+    - UI
+    enforcementLevel: 0
+    typeFilter: 3
+  - prefix: T_
+    contains: 
+    suffix: _\d+
+    labels:
+    - texture
+    - slice
+    enforcementLevel: 0
+    typeFilter: 3
+  - prefix: RT_
+    contains: 
+    suffix: 
+    labels:
+    - renderTexture
+    enforcementLevel: 3
+    typeFilter: 4
+  - prefix: AClip_
+    contains: 
+    suffix: 
+    labels:
+    - animationClip
+    enforcementLevel: 3
+    typeFilter: 8
+  - prefix: SM_
+    contains: 
+    suffix: 
+    labels:
+    - model
+    - static
+    enforcementLevel: 1
+    typeFilter: 5
+  - prefix: SKM_
+    contains: 
+    suffix: 
+    labels:
+    - model
+    - skinned
+    enforcementLevel: 1
+    typeFilter: 5
+  - prefix: M_
+    contains: 
+    suffix: 
+    labels:
+    - material
+    enforcementLevel: 3
+    typeFilter: 1
+  - prefix: S_
+    contains: 
+    suffix: 
+    labels:
+    - shader
+    enforcementLevel: 1
+    typeFilter: 2
+  - prefix: S_FX_
+    contains: 
+    suffix: 
+    labels:
+    - effect
+    enforcementLevel: 1
+    typeFilter: 2
+  - prefix: VFX_
+    contains: 
+    suffix: 
+    labels:
+    - vfx
+    enforcementLevel: 3
+    typeFilter: 6
+  - prefix: SFX_
+    contains: 
+    suffix: 
+    labels:
+    - audio
+    - sfx
+    enforcementLevel: 1
+    typeFilter: 7
+  - prefix: V_
+    contains: 
+    suffix: 
+    labels:
+    - audio
+    - voice
+    enforcementLevel: 1
+    typeFilter: 7
+  - prefix: MUS_
+    contains: 
+    suffix: 
+    labels:
+    - audio
+    - music
+    enforcementLevel: 1
+    typeFilter: 7
+  - prefix: ENV_
+    contains: 
+    suffix: 
+    labels:
+    - audio
+    - environmental
+    enforcementLevel: 1
+    typeFilter: 7
+  - prefix: DIR_
+    contains: 
+    suffix: 
+    labels:
+    - timeline
+    enforcementLevel: 1
+    typeFilter: 10
+  - prefix: SIG_
+    contains: 
+    suffix: 
+    labels:
+    - signal
+    enforcementLevel: 1
+    typeFilter: 10
+  - prefix: PF_
+    contains: 
+    suffix: 
+    labels:
+    - prefab
+    enforcementLevel: 1
+    typeFilter: 9

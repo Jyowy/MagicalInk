@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.kvrl.engn": "file:C:/Projects/KodanshaVRLab/KVRLEngine/Assets/com.KVRL.KVRLENGINE",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.cinemachine": "2.9.7",
     "com.unity.collab-proxy": "2.0.5",
@@ -20,6 +21,7 @@
     "com.unity.xr.hands": "1.2.1",
     "com.unity.xr.interaction.toolkit": "2.4.0",
     "com.unity.xr.management": "4.3.3",
+    "com.unity.xr.openxr": "1.8.1",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
