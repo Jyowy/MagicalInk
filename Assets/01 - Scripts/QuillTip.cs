@@ -11,7 +11,7 @@ public class QuillTip : MonoBehaviour
     [SerializeField]
     private float tipSize = 0.01f;
     [SerializeField]
-    private Color inkColor = new Color(0.01f, 0.02f, 0.1f);
+    private Color32 inkColor = new Color(0.01f, 0.02f, 0.1f);
 
     [ShowInInspector]
     private float inkAmount = 1f;
@@ -21,12 +21,15 @@ public class QuillTip : MonoBehaviour
 
     [ShowInInspector, ReadOnly]
     private Papyrus papyrus = null;
+    [ShowInInspector, ReadOnly]
+    private bool connected = false;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out papyrus))
         {
             droppingInk = true;
+            connected = false;
         }
     }
 
@@ -36,6 +39,7 @@ public class QuillTip : MonoBehaviour
         {
             papyrus = null;
             droppingInk = false;
+            connected = false;
         }
     }
 
@@ -44,7 +48,8 @@ public class QuillTip : MonoBehaviour
         if (papyrus != null)
         {
             //Debug.Log($"Painting!");
-            papyrus.Paint(tipPoint.position, tipSize, inkColor);
+            papyrus.Paint(tipPoint.position, tipSize, inkColor, connected);
+            connected = true;
         }
     }
 

@@ -30,6 +30,16 @@ public class Quill : GrabbableObject
             : 0f;
     }
 
+    [Button]
+
+    private void DebugMove(Vector2 diff)
+    {
+        Vector3 newPos = transform.position;
+        newPos.x += diff.x;
+        newPos.z += diff.y; 
+        transform.position = newPos;
+    }
+
     //public override void UpdateGrabbingPoint(Vector3 point, Quaternion rotation, Handedness hand)
     //{
     //    Vector3 positionOffset = hand == Handedness.Right ? rightHandPositionOffset : leftHandPositionOffset;

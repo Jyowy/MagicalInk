@@ -1,0 +1,220 @@
+{
+    "name": "I_DebugActions",
+    "maps": [
+        {
+            "name": "Debug",
+            "id": "97ad61f1-d245-4502-b4a5-23775da271d2",
+            "actions": [
+                {
+                    "name": "ChangeToPoint",
+                    "type": "Button",
+                    "id": "dcc2a9ab-f688-4ca2-ba28-af456e4e4eaf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ChangeToOptimizedPoint",
+                    "type": "Button",
+                    "id": "0492dd7f-78c8-4f2b-9078-cd44ee42888c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ChangeToBrush",
+                    "type": "Button",
+                    "id": "da48a3ad-f6ed-4f2a-9a90-da1e1c855d0c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleConnected",
+                    "type": "Button",
+                    "id": "47b2eb9b-eb15-4dad-83e6-680915c24539",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Clear",
+                    "type": "Button",
+                    "id": "e087da65-4d9e-49e3-9191-f0b238d910d7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SetResolution1",
+                    "type": "Button",
+                    "id": "8ba76651-a5d1-47ef-ba0d-9b991e41040c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SetResolution2",
+                    "type": "Button",
+                    "id": "49786e55-89c1-4dd3-a7da-513ba28a8b8e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SetResolution3",
+                    "type": "Button",
+                    "id": "a1c6db4d-5816-462d-b239-e0e937ea59d6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SetResolution4",
+                    "type": "Button",
+                    "id": "c8685761-3191-425f-b452-0495cb7f190c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SetResolution5",
+                    "type": "Button",
+                    "id": "30fe5a8d-0f4a-4da9-aa03-4cd00833644a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f5c7961d-838a-4228-b7e9-a8bac1a5cc41",
+                    "path": "<XRController>{LeftHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "DebugScheme",
+                    "action": "ChangeToPoint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3df15966-a1f2-45f1-91a8-fc765fe7b969",
+                    "path": "<XRController>{LeftHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "DebugScheme",
+                    "action": "ChangeToOptimizedPoint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "40160df8-696e-49e6-b092-568d44da7b2a",
+                    "path": "<XRController>{LeftHand}/thumbstickClicked",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "DebugScheme",
+                    "action": "ChangeToBrush",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "24b927eb-c49b-42c1-94c5-6acf66df3439",
+                    "path": "<XRController>{LeftHand}/triggerPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "DebugScheme",
+                    "action": "ToggleConnected",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e5b77b37-7084-4660-a6be-ed7caa4f99c5",
+                    "path": "<XRController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "DebugScheme",
+                    "action": "SetResolution1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b0a0b190-c281-4e12-839a-c8eb13fb61f7",
+                    "path": "<XRController>{RightHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "DebugScheme",
+                    "action": "SetResolution2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "323a493c-4bfd-4f3d-9ac6-46d901f52d77",
+                    "path": "<XRController>{RightHand}/thumbstickClicked",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "DebugScheme",
+                    "action": "SetResolution3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b725845b-3b15-4df0-841f-02531817f436",
+                    "path": "<XRController>{RightHand}/triggerPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "DebugScheme",
+                    "action": "SetResolution4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "68926478-ba16-4540-a927-5aa56d22b207",
+                    "path": "<XRController>{RightHand}/gripPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "DebugScheme",
+                    "action": "SetResolution5",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9d79889b-3444-4798-824e-aed587e18743",
+                    "path": "<XRController>{LeftHand}/gripPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "DebugScheme",
+                    "action": "Clear",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "DebugScheme",
+            "bindingGroup": "DebugScheme",
+            "devices": []
+        }
+    ]
+}

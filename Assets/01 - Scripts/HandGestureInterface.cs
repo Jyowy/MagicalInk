@@ -2,12 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEditor.XR;
-using UnityEditor.XR.Hands;
 
 using Sirenix.OdinInspector;
 using UnityEngine.XR.Hands;
-using Unity.VisualScripting;
 
 [System.Serializable]
 public struct HandInput
