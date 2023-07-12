@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Sirenix.OdinInspector;
-using UnityEngine.InputSystem;
 
 public class Papyrus : MonoBehaviour
 {
@@ -27,12 +26,14 @@ public class Papyrus : MonoBehaviour
     [SerializeField]
     private float brushDispersion = 1.0f;
 
+
     private Material papyrusMaterial = null;
     private Collider papyrusCollider = null;
 
     private Texture2D canvasTexture = null;
     private Vector2 textureSize = Vector2.zero;
     private Color32[] pixelData = null;
+    private Texture2D transparentTexture = null;
 
     private Color32[] brushData = null;
 
@@ -45,6 +46,11 @@ public class Papyrus : MonoBehaviour
     {
         SetupBrush();
         SetupTexture(resolution);
+
+        transparentTexture = new Texture2D(1, 1);
+        transparentTexture.SetPixel(0, 0, Color.clear);
+        transparentTexture.Apply();
+        RemoveHelper();
     }
 
     [Button]
@@ -688,4 +694,18 @@ public class Papyrus : MonoBehaviour
         nextColor.a = (byte)(Mathf.Clamp01(currentColor.a + alpha) * 255f);
         pixelData[index] = nextColor;
     }
+
+    [Button]
+    public void RemoveHelper()
+    {
+        papyrusMaterial.SetTexture("_Helper", transparentTexture);
+    }
+
+    [Button]
+    public void SetHelper(Texture2D helper)
+    {
+        papyrusMaterial.SetTexture("_Helper", helper);
+    }
+
+    public Color32[] GetDrawingData() => pixelData;
 }
