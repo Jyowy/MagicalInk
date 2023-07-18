@@ -153,11 +153,26 @@ public static class CreateSpellMaps
     {
         try
         {
+            bool setupTextureImporter = false;
+            if (!File.Exists(textureName))
+            {
+                setupTextureImporter = true;
+            }
+
             FileStream file = File.Open(textureName, FileMode.OpenOrCreate, FileAccess.Write);
             var data = texture.EncodeToPNG();
             file.Write(data);
 
             file.Close();
+
+            if (setupTextureImporter)
+            {
+                AssetDatabase.ImportAsset(textureName);
+                var importer = (TextureImporter)AssetImporter.GetAtPath(textureName);
+                importer.textureType = TextureImporterType.Sprite;
+                importer.isReadable = true;
+                importer.SaveAndReimport();
+            }
         }
         catch (System.Exception e)
         {

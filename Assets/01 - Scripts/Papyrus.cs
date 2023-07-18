@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 using Sirenix.OdinInspector;
+using System;
 
-public class Papyrus : MonoBehaviour
+public class Papyrus : GrabbableObject, IFlammable
 {
     public enum PaintMethod
     {
@@ -16,6 +18,15 @@ public class Papyrus : MonoBehaviour
     [SerializeField]
     private Renderer canvasRenderer = null;
     [SerializeField]
+    private Transform spellAnchorPoint = null;
+    [SerializeField]
+    private Color availableColor = Color.white;
+    [SerializeField]
+    private Color consumedColor = Color.grey;
+    [SerializeField]
+    private Color burnedColor = Color.black;
+
+    [SerializeField]
     private int resolution = 1000;
     [SerializeField]
     private PaintMethod paintMethod = PaintMethod.Point;
@@ -26,6 +37,9 @@ public class Papyrus : MonoBehaviour
     [SerializeField]
     private float brushDispersion = 1.0f;
 
+    public UnityEvent<Papyrus> OnConsumed = new UnityEvent<Papyrus>();
+    public UnityEvent<Papyrus> OnBurned = new UnityEvent<Papyrus>();
+    public UnityEvent<Papyrus> OnDestroyed = new UnityEvent<Papyrus>();
 
     private Material papyrusMaterial = null;
     private Collider papyrusCollider = null;
@@ -38,9 +52,15 @@ public class Papyrus : MonoBehaviour
     private Color32[] brushData = null;
 
     [ShowInInspector]
-    private Color32 clearColor = Color.clear;
+    public bool IsConsumed { get; private set; } = false;
+    [ShowInInspector]
+    private Color32 clearColor = new Color32(255, 255, 255, 0);
     [ShowInInspector, ReadOnly]
     private float pixelDensity = 1f;
+    [ShowInInspector, ReadOnly]
+    public bool isBurned { get; private set; } = false;
+
+    public Transform GetSpellAnchorPoint() => spellAnchorPoint;
 
     private void Awake()
     {
@@ -81,6 +101,7 @@ public class Papyrus : MonoBehaviour
         pixelData = canvasTexture.GetPixels32();
         ClearTexture();
 
+        papyrusMaterial.SetColor("_PaperColor", availableColor);
         papyrusMaterial.SetTexture("_Canvas", canvasTexture);
 
         Debug.Log($"Texture created with size {canvasTexture.width} x {canvasTexture.height}");
@@ -90,6 +111,20 @@ public class Papyrus : MonoBehaviour
     public void ClearTexture()
     {
         for (int i = 0; i < pixelData.Length; i++) { pixelData[i] = clearColor; }
+        ApplyChangesToTexture();
+    }
+
+    public void ApplyTemplate(Texture2D template)
+    {
+        var templateData = template.GetPixels32();
+        for (int i = 0; i < templateData.Length; ++i)
+        {
+            if (templateData[i].a > 0)
+            {
+                pixelData[i] = templateData[i];
+            }
+        }
+
         ApplyChangesToTexture();
     }
 
@@ -290,7 +325,7 @@ public class Papyrus : MonoBehaviour
 
                     for (int x = xstart2 + 1; x < xend2; ++x, ++index)
                     {
-                        pixelData[index] = color;
+                        PaintPixel(index, color);
                     }
 
                     for (int x = xend2; x <= xend1; ++x, ++index)
@@ -358,7 +393,8 @@ public class Papyrus : MonoBehaviour
                 int index = y * width + startx;
                 for (int x = startx; x <= endx; ++x, ++index)
                 {
-                    pixelData[index] = color;
+                    //pixelData[index] = color;
+                    PaintPixel(index, color);
                 }
             }
         }
@@ -376,7 +412,8 @@ public class Papyrus : MonoBehaviour
                 int index = y * width + startx;
                 for (int x = startx; x <= endx; ++x, ++index)
                 {
-                    pixelData[index] = color;
+                    //pixelData[index] = color;
+                    PaintPixel(index, color);
                 }
             }
         }
@@ -687,6 +724,11 @@ public class Papyrus : MonoBehaviour
         }
     }
 
+    private void PaintPixel(int index, Color32 color)
+    {
+        pixelData[index] = color;
+    }
+
     private void PaintTranslucidPixel(int index, Color32 color, float alpha)
     {
         Color32 currentColor = pixelData[index];
@@ -704,8 +746,45 @@ public class Papyrus : MonoBehaviour
     [Button]
     public void SetHelper(Texture2D helper)
     {
+        if (helper == null)
+        {
+            RemoveHelper();
+            return;
+        }
+
         papyrusMaterial.SetTexture("_Helper", helper);
     }
 
     public Color32[] GetDrawingData() => pixelData;
+
+    [Button]
+    public void Consume()
+    {
+        IsConsumed = true;
+        papyrusMaterial.SetColor("_PaperColor", consumedColor);
+        RemoveHelper();
+
+        OnConsumed?.Invoke(this);
+    }
+
+    [Button]
+    public void DestroyPapyrus()
+    {
+        OnDestroyed?.Invoke(this);
+    }
+
+    public void Ignite(float fireIntensity)
+    {
+        if (isBurned)
+        {
+            return;
+        }
+
+        isBurned = true;
+        Consume();
+
+        OnBurned?.Invoke(this);
+        papyrusMaterial.SetColor("_PaperColor", burnedColor);
+        ClearTexture();
+    }
 }

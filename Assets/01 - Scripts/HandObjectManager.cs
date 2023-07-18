@@ -9,7 +9,7 @@ using Sirenix.OdinInspector;
 public class HandObjectManager : MonoBehaviour
 {
     [SerializeField]
-    private bool rightHand = true;
+    private Handedness hand = Handedness.Right;
     [SerializeField]
     private Transform grabbingPoint = null;
     [SerializeField]
@@ -32,19 +32,18 @@ public class HandObjectManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log($"OnTriggerEnter {other.name}");
-
         if (other.TryGetComponent<GrabbableObject>(out var grabbable))
         {
             hoveringList.Add(grabbable);
-            hoveringListDirty = true;
+            SetHoveringListDirty();
+
+            grabbable.OnInteractionChanged?.AddListener(OnGrabbableInteractionChanged);
+            grabbable.OnInteractionChanged?.AddListener(OnGrabbableAvailabilityChanged);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        //Debug.Log($"OnTriggerExit {other.name}");
-
         if (other.TryGetComponent<GrabbableObject>(out var grabbable))
         {
             if (grabbable == currentlyHoveringObject)
@@ -53,15 +52,31 @@ public class HandObjectManager : MonoBehaviour
             }    
 
             hoveringList.Remove(grabbable);
-            hoveringListDirty = true;
+            SetHoveringListDirty();
+
+            grabbable.OnInteractionChanged?.RemoveListener(OnGrabbableInteractionChanged);
+            grabbable.OnInteractionChanged?.RemoveListener(OnGrabbableAvailabilityChanged);
         }
     }
+
+    private void OnGrabbableInteractionChanged(bool interactive)
+    {
+        SetHoveringListDirty();
+    }
+
+    private void OnGrabbableAvailabilityChanged(bool available)
+    {
+        SetHoveringListDirty();
+    }
+
+    private void SetHoveringListDirty() => hoveringListDirty = true;
 
     private void LateUpdate()
     {
         Vector3 grabbingPointPos = grabbingPoint.position;
 
-        if (currentlyGrabbingObject == null)
+        if (currentlyGrabbingObject == null
+            && hoveringList.Count > 0)
         {
             if (Vector3.Distance(grabbingPointPos, prevPosition) >= 0.1f)
             {
@@ -83,7 +98,14 @@ public class HandObjectManager : MonoBehaviour
 
         if (currentlyGrabbingObject != null)
         {
-            currentlyGrabbingObject.UpdateGrabbingPoint(grabbingPointPos, handInput.rotation, rightHand ? Handedness.Right : Handedness.Left);
+            if (currentlyGrabbingObject.IsStabilized)
+            {
+                StabilizeGrabbingObject(grabbingPointPos);
+            }
+            else
+            {
+                currentlyGrabbingObject.UpdateGrabbingPoint(grabbingPointPos, handInput.rotation, hand);
+            }
         }
     }
 
@@ -94,16 +116,19 @@ public class HandObjectManager : MonoBehaviour
             return;
         }
 
+        hoveringList.RemoveAll(grabbable => grabbable == null);
+
         float bestFit = -1f;
         GrabbableObject bestGrabbable = null;
         foreach (var grabbable in hoveringList)
         {
-            if (!grabbable.IsAvailabe)
+            if (!grabbable.IsAvailabe
+                || !grabbable.IsInteractive)
             {
                 continue;
             }
 
-            float fit = grabbable.GetFitRate(grabbingPointPos);
+            float fit = grabbable.GetDistanceTo(grabbingPointPos);
             if (fit > bestFit)
             {
                 bestFit = fit;
@@ -113,7 +138,6 @@ public class HandObjectManager : MonoBehaviour
 
         if (bestGrabbable != currentlyHoveringObject)
         {
-            StopHoveringCurrentObject();
             StartHoveringObject(bestGrabbable);
         }
     }
@@ -129,6 +153,7 @@ public class HandObjectManager : MonoBehaviour
 
     private void StartHoveringObject(GrabbableObject grabbable)
     {
+        StopHoveringCurrentObject();
         if (grabbable != null)
         {
             currentlyHoveringObject = grabbable;
@@ -138,28 +163,65 @@ public class HandObjectManager : MonoBehaviour
 
     private void CheckInput()
     {
-        handInput = handGestureInterface.GetHandInput(rightHand ? Handedness.Right : Handedness.Left);
+        handInput = handGestureInterface.GetHandInput(hand);
 
-        if (handInput.tripplePinch
-            && currentlyHoveringObject != null)
+        if (currentlyGrabbingObject != null)
+        {
+            GrabbableObject grabbable = currentlyGrabbingObject;
+            if (grabbable is Paperball)
+            {
+                if (!handInput.palmGrab)
+                {
+                    StopGrabbing();
+                }
+            }
+            else if (!handInput.indexPinch)
+            {
+                StopGrabbing();
+            }
+        }
+        else if (currentlyHoveringObject != null)
         {
             GrabbableObject grabbable = currentlyHoveringObject;
-            StopHoveringCurrentObject();
-            StartGrabbing(grabbable);
-        }
-        else if (!handInput.indexPinch
-            && currentlyGrabbingObject != null)
-        {
-            StopGrabbing();
+            if (grabbable is Quill)
+            {
+                if (handInput.tripplePinch)
+                {
+                    StartGrabbing(grabbable);
+                }
+            }
+            else if (grabbable is Papyrus papyrus
+                && handInput.palmGrab
+                && !handInput.prevMiddleToPalm)
+            {
+                papyrus.DestroyPapyrus();
+            }
+            else if (grabbable is Paperball
+                && handInput.palmGrab)
+            {
+                StartGrabbing(grabbable);
+            }
+            else if (handInput.indexPinch
+                && !handInput.prevIndexPinch)
+            {
+                StartGrabbing(grabbable);
+            }
         }
     }
 
     private void StartGrabbing(GrabbableObject grabbable)
     {
+        StopHoveringCurrentObject();
+
         if (grabbable != null)
         {
+            lastMoves.Clear();
+            lastPos = transform.position;
+
             currentlyGrabbingObject = grabbable;
-            currentlyGrabbingObject.StartGrabbing();
+            currentlyGrabbingObject.StartGrabbing(grabbingPoint.position);
+
+            currentlyGrabbingObject.OnGrabStopped?.AddListener(StopGrabbing);
         }
     }
 
@@ -167,8 +229,41 @@ public class HandObjectManager : MonoBehaviour
     {
         if (currentlyGrabbingObject != null)
         {
+            currentlyGrabbingObject.OnGrabStopped?.RemoveListener(StopGrabbing);
+
             currentlyGrabbingObject.StopGrabbing();
             currentlyGrabbingObject = null;
+            SetHoveringListDirty();
         }
+    }
+
+    [ShowInInspector, ReadOnly]
+    private readonly List<Vector3> lastMoves = new List<Vector3>();
+    [ShowInInspector]
+    private int maxLastMoves = 10;
+    [ShowInInspector, ReadOnly]
+    private Vector3 lastPos = Vector3.zero;
+
+    private void StabilizeGrabbingObject(Vector3 grabbingPointPos)
+    {
+        Vector3 stabilizedPoint;
+        Vector3 currentMove = grabbingPointPos - lastPos;
+        lastPos = grabbingPointPos;
+
+        Vector3 avgMove = currentMove;
+        foreach (var move in lastMoves)
+        {
+            avgMove += move;
+        }
+        avgMove /= lastMoves.Count + 1;
+
+        lastMoves.Add(currentMove);
+        while (lastMoves.Count > maxLastMoves)
+        {
+            lastMoves.RemoveAt(0);
+        }
+
+        stabilizedPoint = lastPos + avgMove;
+        currentlyGrabbingObject.UpdateGrabbingPoint(stabilizedPoint, handInput.rotation, hand);
     }
 }

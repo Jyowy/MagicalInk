@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 using UnityEngine.XR.Hands;
 
 [RequireComponent(typeof(Collider))]
-public abstract class GrabbableObject : MonoBehaviour
+public class GrabbableObject : MonoBehaviour
 {
     public enum ObjectState
     {
@@ -16,31 +16,97 @@ public abstract class GrabbableObject : MonoBehaviour
         Grabbing
     }
 
+    [TitleGroup("Grabbable Settings", order: 100)]
     [SerializeField]
-    private UnityEvent OnHoverStarted = new UnityEvent();
+    private bool relativeGrab = false;
+    [TitleGroup("Grabbable Settings")]
     [SerializeField]
-    private UnityEvent OnHoverStopped = new UnityEvent();
+    private bool followPosition = true;
+    [TitleGroup("Grabbable Settings")]
     [SerializeField]
-    private UnityEvent OnGrabStarted = new UnityEvent();
+    private bool followRotation = true;
+    [TitleGroup("Grabbable Settings")]
     [SerializeField]
-    private UnityEvent OnGrabStopped = new UnityEvent();
+    private bool stabilizeDrag = false;
 
+    [BoxGroup("Grabbable Settings/Hand Offsets", order: 0)]
+    [SerializeField]
+    private Transform customGrabPoint = null;
+    [BoxGroup("Grabbable Settings/Hand Offsets"), ShowIf("followPosition")]
     [SerializeField]
     protected Vector3 leftHandPositionOffset = Vector3.zero;
+    [BoxGroup("Grabbable Settings/Hand Offsets"), ShowIf("followPosition")]
     [SerializeField]
     protected Vector3 rightHandPositionOffset = Vector3.zero;
+    [BoxGroup("Grabbable Settings/Hand Offsets"), ShowIf("followRotation")]
     [SerializeField]
     protected Quaternion leftHandRotationOffset = Quaternion.identity;
+    [BoxGroup("Grabbable Settings/Hand Offsets"), ShowIf("followRotation")]
     [SerializeField]
     protected Quaternion rightHandRotationOffset = Quaternion.identity;
 
-    private bool available = true;
+    [FoldoutGroup("Grabbable Settings/Events", order: 1)]
+    public UnityEvent<bool> OnAvailabilityChanged = new UnityEvent<bool>();
+    [FoldoutGroup("Grabbable Settings/Events")]
+    public UnityEvent<bool> OnInteractionChanged = new UnityEvent<bool>();
+    [FoldoutGroup("Grabbable Settings/Events")]
+    public UnityEvent OnHoverStarted = new UnityEvent();
+    [FoldoutGroup("Grabbable Settings/Events")]
+    public UnityEvent OnHoverStopped = new UnityEvent();
+    [FoldoutGroup("Grabbable Settings/Events")]
+    public UnityEvent OnGrabStarted = new UnityEvent();
+    [FoldoutGroup("Grabbable Settings/Events")]
+    public UnityEvent OnGrabStopped = new UnityEvent();
 
+    [BoxGroup("Grabbable Settings/Runtime Debug", order: 2)]
     [ShowInInspector, ReadOnly]
-    public bool IsAvailabe => available;
+    public bool IsStabilized => stabilizeDrag;
+    [ShowInInspector, ReadOnly]
+    public bool IsAvailabe { get; protected set; } = true;
+    [ShowInInspector, ReadOnly]
+    public bool IsInteractive { get; protected set; } = true;
+    [BoxGroup("Grabbable Settings/Runtime Debug")]
     [ShowInInspector, ReadOnly]
     public ObjectState State { get; private set; } = ObjectState.Idle;
 
+    private Vector3 firstGrabPoint = Vector3.zero;
+    private Vector3 positionOnStartGrab = Vector3.zero;
+
+    public Transform GetGrabbingPoint() => customGrabPoint != null ? customGrabPoint.transform : transform;
+
+    public void EnableInteraction()
+    {
+        if (IsInteractive)
+        {
+            return;
+        }
+
+        IsInteractive = true;
+        OnInteractionChanged?.Invoke(IsInteractive);
+    }
+
+    public void DisableInteraction()
+    {
+        if (!IsInteractive)
+        {
+            return;
+        }
+
+        IsInteractive = false;
+
+        if (State == ObjectState.Hovering)
+        {
+            StopHovering();
+        }
+        else if (State == ObjectState.Grabbing)
+        {
+            StopGrabbing();
+        }
+
+        OnInteractionChanged?.Invoke(IsInteractive);
+    }
+
+    [BoxGroup("Grabbable Settings/Runtime Debug")]
     [Button]
     public void StartHovering()
     {
@@ -51,12 +117,14 @@ public abstract class GrabbableObject : MonoBehaviour
         }
 
         State = ObjectState.Hovering;
+
         OnStartHovering();
         OnHoverStarted?.Invoke();
     }
 
     protected virtual void OnStartHovering() { }
 
+    [BoxGroup("Grabbable Settings/Runtime Debug")]
     [Button]
     public void StopHovering()
     {
@@ -67,14 +135,16 @@ public abstract class GrabbableObject : MonoBehaviour
         }
 
         State = ObjectState.Idle;
+
         OnStopHovering();
         OnHoverStopped?.Invoke();
     }
 
     protected virtual void OnStopHovering() { }
 
+    [BoxGroup("Grabbable Settings/Runtime Debug")]
     [Button]
-    public void StartGrabbing()
+    public void StartGrabbing(Vector3 grabPosition)
     {
         if (State == ObjectState.Grabbing)
         {
@@ -83,12 +153,22 @@ public abstract class GrabbableObject : MonoBehaviour
         }
 
         State = ObjectState.Grabbing;
+        if (relativeGrab)
+        {
+            firstGrabPoint = grabPosition;
+            positionOnStartGrab = transform.position;
+        }
+
+        IsAvailabe = false;
+        OnAvailabilityChanged?.Invoke(IsAvailabe);
+
         OnStartGrabbing();
         OnGrabStarted?.Invoke();
     }
 
     protected virtual void OnStartGrabbing() { }
 
+    [BoxGroup("Grabbable Settings/Runtime Debug")]
     [Button]
     public void StopGrabbing()
     {
@@ -99,6 +179,9 @@ public abstract class GrabbableObject : MonoBehaviour
         }
 
         State = ObjectState.Idle;
+        IsAvailabe = true;
+        OnAvailabilityChanged?.Invoke(IsAvailabe);
+
         OnStopGrabbing();
         OnGrabStopped?.Invoke();
     }
@@ -106,20 +189,56 @@ public abstract class GrabbableObject : MonoBehaviour
     protected virtual void OnStopGrabbing() { }
 
     /// <summary>
-    /// Returns a score, from 0 to 1, on how close the given point is to a grabbing point.
-    /// I. e.: a paper may have its grabbing points on the edges, while a quill may have it in the mass center.
+    /// Returns the distance from the closest grab point of the object to the given point.
+    /// Its main use is to prioritize the closest object when the user performs a grab while multiple grabbable objects are in reach.
+    /// I. e.: a paper may have its grabbing points on the edges, while a quill may have it in its mass center.
     /// </summary>
     /// <returns></returns>
-    public abstract float GetFitRate(Vector3 point);
+    public virtual float GetDistanceTo(Vector3 point) => Vector3.Distance(transform.position, point);
 
     public virtual void UpdateGrabbingPoint(Vector3 point, Quaternion rotation, Handedness hand)
     {
+        if (followPosition)
+        {
+            Vector3 grabPoint = point;
+
+            if (relativeGrab)
+            {
+                grabPoint = positionOnStartGrab + (point - firstGrabPoint);
+            }
+
+            Vector3 positionOffset = hand == Handedness.Right ? rightHandPositionOffset : leftHandPositionOffset;
+            transform.position = grabPoint
+                + transform.forward * positionOffset.z
+                + transform.right * positionOffset.x
+                + transform.up * positionOffset.y;
+        }
+        if (followRotation)
+        {
+            Quaternion rotationOffset = hand == Handedness.Right ? rightHandRotationOffset : leftHandRotationOffset;
+            transform.rotation = rotation * rotationOffset;
+        }
+    }
+
+    public virtual void UpdateGrabbingPoint(Vector3 point, Handedness hand)
+    {
+        Vector3 grabPoint = point;
+
+        if (relativeGrab)
+        {
+            grabPoint = positionOnStartGrab + (point - firstGrabPoint);
+        }
+
         Vector3 positionOffset = hand == Handedness.Right ? rightHandPositionOffset : leftHandPositionOffset;
-        transform.position = point
+        transform.position = grabPoint
             + transform.forward * positionOffset.z
             + transform.right * positionOffset.x
             + transform.up * positionOffset.y;
-        Quaternion rotationOffset = hand == Handedness.Right ? rightHandRotationOffset : leftHandRotationOffset;
-        transform.rotation = rotation * rotationOffset;
+    }
+
+    [Button]
+    private void DebugMove(Vector3 newPos)
+    {
+        UpdateGrabbingPoint(newPos, Handedness.Right);
     }
 }

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8e627dba990950439efb548e33d1bd1, type: 3}
+  m_Name: PhantasmalFire
+  m_EditorClassIdentifier: 
+  spellName: Phantasmal Fire
+  spellDescription: 'Creates a floating phantasmal sphere that resembles fire but
+    doesn''t burn.
+
+
+    Useful as a lamp or keeping beasts at bay.'
+  spellType: 1
+  spellEffects: {fileID: 504822110665482961, guid: 1d7bf126704cd7e42a03be928dd12051,
+    type: 3}
+  bookInfo: {fileID: 2800000, guid: 6df90942235547a4e8c0debdffd3a61f, type: 3}
+  pattern: {fileID: 2800000, guid: 2744c57024d2909439545aec29fb88bf, type: 3}
+  valueData:
+    valueMap: {fileID: 2800000, guid: f3776d0711be169429e975c935de2714, type: 3}
+    reds: 245589
+    greens: 374343
+    blues: 10506
+    blanks: 418138

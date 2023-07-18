@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8e627dba990950439efb548e33d1bd1, type: 3}
+  m_Name: PyreballSeal
+  m_EditorClassIdentifier: 
+  spellName: Pyreball Seal
+  spellDescription: 'Creates a floating fire sphere.
+
+
+    Useful for boiling water
+    and burning objects.'
+  spellType: 1
+  spellEffects: {fileID: 504822110665482961, guid: 879229b8d457fd44baf2032db108389f,
+    type: 3}
+  bookInfo: {fileID: 2800000, guid: 1a6f4b72b1e879b4ca115009d08c521e, type: 3}
+  pattern: {fileID: 2800000, guid: 2729b590662105840a1a661027057ad8, type: 3}
+  valueData:
+    valueMap: {fileID: 2800000, guid: 06e4d335f3f4bab428924d8b9da87f69, type: 3}
+    reds: 384365
+    greens: 199956
+    blues: 53631
+    blanks: 410624

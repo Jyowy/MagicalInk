@@ -10,9 +10,16 @@ using UnityEngine.XR.Hands;
 public struct HandInput
 {
     public bool isTracked;
+
+    public bool prevIndexPinch;
     public bool indexPinch;
     public bool middlePinch;
     public bool tripplePinch;
+
+    public bool middleToPalm;
+    public bool prevMiddleToPalm;
+    public bool prevPalmGrab;
+    public bool palmGrab;
 
     public Vector3 position;
     public Quaternion rotation;
@@ -26,6 +33,8 @@ public class HandGestureInterface : MonoBehaviour
     private float middlePinchThreshold = 0.05f;
     [SerializeField]
     private float tripplePinchThreshold = 0.05f;
+    [SerializeField]
+    private float palmGrabThreshold = 0.05f;
 
     [ShowInInspector, ReadOnly]
     public HandInput leftHand = new HandInput();
@@ -77,8 +86,6 @@ public class HandGestureInterface : MonoBehaviour
 
     private void GetHandData(XRHand hand, ref HandInput handInput)
     {
-        // TODO
-
         handInput.isTracked = hand.isTracked;
         if (!hand.isTracked)
         {
@@ -92,6 +99,8 @@ public class HandGestureInterface : MonoBehaviour
             ok &= hand.GetJoint(XRHandJointID.ThumbTip).TryGetPose(out Pose thumbTip);
             ok &= hand.GetJoint(XRHandJointID.IndexTip).TryGetPose(out Pose indexTip);
             ok &= hand.GetJoint(XRHandJointID.MiddleDistal).TryGetPose(out Pose middleDistal);
+            ok &= hand.GetJoint(XRHandJointID.RingTip).TryGetPose(out Pose ringTip);
+            ok &= hand.GetJoint(XRHandJointID.LittleTip).TryGetPose(out Pose littleTip);
             ok &= hand.GetJoint(XRHandJointID.Palm).TryGetPose(out Pose palm);
 
             if (!ok)
@@ -104,9 +113,19 @@ public class HandGestureInterface : MonoBehaviour
             float thumbMiddleDistance = Vector3.Distance(thumbTip.position, middleDistal.position);
             float indexMiddleDistance = Vector3.Distance(indexTip.position, middleDistal.position);
 
+            handInput.prevIndexPinch = handInput.indexPinch;
             handInput.indexPinch = thumbIndexDistance < indexPinchThreshold;
             handInput.middlePinch = thumbMiddleDistance < middlePinchThreshold;
-            handInput.tripplePinch = handInput.indexPinch && handInput.middlePinch && indexMiddleDistance < tripplePinchThreshold;
+            bool indexMiddleTogether = indexMiddleDistance < tripplePinchThreshold;
+            handInput.tripplePinch = handInput.indexPinch && handInput.middlePinch && indexMiddleTogether;
+
+            handInput.prevMiddleToPalm = handInput.middleToPalm;
+            handInput.middleToPalm = Vector3.Distance(palm.position, middleDistal.position) < palmGrabThreshold;
+            handInput.prevPalmGrab = handInput.palmGrab;
+            handInput.palmGrab = handInput.middleToPalm
+                && Vector3.Distance(palm.position, indexTip.position) < palmGrabThreshold
+                && Vector3.Distance(palm.position, ringTip.position) < palmGrabThreshold
+                && Vector3.Distance(palm.position, littleTip.position) < palmGrabThreshold;
 
             handInput.position = palm.position;
             handInput.rotation = palm.rotation;

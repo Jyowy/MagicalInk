@@ -1,53 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 using Sirenix.OdinInspector;
-using DG.Tweening;
-using UnityEngine.XR.Hands;
 
 public class Quill : GrabbableObject
 {
-    [SerializeField, TitleGroup("Quill")]
-    private float length = 1f;
-    [SerializeField, TitleGroup("Quill")]
-    private float weight = 1f;
-    [SerializeField, TitleGroup("Quill")]
-    private float thickness = 1f;
-
+    [TitleGroup("Quill Settings", order: 90)]
     [SerializeField]
     private Collider grabbableArea = null;
-    [SerializeField]
-    private Transform quillParent = null;
 
-    [ShowInInspector, ReadOnly]
-    private Vector3 grabbingPoint = Vector3.zero;
+    [FoldoutGroup("Quill Settings/Events", order: 1)]
+    public UnityEvent<Papyrus> OnStartDrawing = new UnityEvent<Papyrus>();
+    [FoldoutGroup("Quill Settings/Events")]
+    public UnityEvent<Papyrus> OnStopDrawing = new UnityEvent<Papyrus>();
 
-    public override float GetFitRate(Vector3 point)
+    public bool BeingHeld => State == ObjectState.Grabbing;
+
+    public override float GetDistanceTo(Vector3 point)
     {
         return grabbableArea != null
             ? Vector3.Distance(grabbableArea.ClosestPoint(point), point)
             : 0f;
     }
 
-    [Button]
-
-    private void DebugMove(Vector2 diff)
+    public void StartDrawing(Papyrus papyrus)
     {
-        Vector3 newPos = transform.position;
-        newPos.x += diff.x;
-        newPos.z += diff.y; 
-        transform.position = newPos;
+        OnStartDrawing?.Invoke(papyrus);
     }
 
-    //public override void UpdateGrabbingPoint(Vector3 point, Quaternion rotation, Handedness hand)
-    //{
-    //    Vector3 positionOffset = hand == Handedness.Right ? rightHandPositionOffset : leftHandPositionOffset;
-    //    quillParent.position = point
-    //        + quillParent.forward * positionOffset.z
-    //        + quillParent.right * positionOffset.x
-    //        + quillParent.up * positionOffset.y;
-    //    Quaternion rotationOffset = hand == Handedness.Right ? rightHandRotationOffset : leftHandRotationOffset;
-    //    quillParent.rotation = rotation * rotationOffset;
-    //}
+    public void StopDrawing(Papyrus papyrus)
+    {
+        OnStopDrawing?.Invoke(papyrus);
+    }
 }
