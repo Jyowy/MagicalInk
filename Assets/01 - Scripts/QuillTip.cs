@@ -116,9 +116,9 @@ public class QuillTip : MonoBehaviour
             size *= Mathf.Lerp(1f, minDropSize, f);
         }
 
-        if (timeWithoutMoving > 0f)
+        if (timeWithoutMoving > 0.5f)
         {
-            float f = Mathf.Clamp01(timeWithoutMoving);
+            float f = Mathf.Clamp01(timeWithoutMoving - 0.5f);
             size *= Mathf.Lerp(1f, maxDropSize, f);
         }
 

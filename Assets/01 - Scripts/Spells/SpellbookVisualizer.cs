@@ -312,6 +312,9 @@ public class SpellbookVisualizer : MonoBehaviour
     private void OnCancelCompeted()
     {
         flippingPage.SetActive(false);
+
+        nextPage = currentPage;
+        UpdateCurrentPages();
     }
 
     private double revertStartTime = 0.0;

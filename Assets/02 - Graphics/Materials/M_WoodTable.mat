@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Quill
-  m_Shader: {fileID: -6465566751694194690, guid: 0ce0af8d7530d1643ac6222156c3713e,
+  m_Name: M_WoodTable
+  m_Shader: {fileID: -6465566751694194690, guid: 5434452a4300ee847bb164be8acd4c93,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -56,6 +56,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NoiseTexture:
+        m_Texture: {fileID: 2800000, guid: c2f77942626156546b83a60e6c4ac51d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -66,6 +70,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _StoneTexture:
+        m_Texture: {fileID: 2800000, guid: a842bbfb1dd43e04f89627cf94a5a496, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -93,6 +101,7 @@ Material:
     - _CameraNearFadeDistance: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
+    - _ColDensity: 1
     - _ColorMode: 0
     - _Cull: 2
     - _Cutoff: 0.5
@@ -111,20 +120,21 @@ Material:
     - _Glossiness: 0
     - _GlossinessSource: 0
     - _GlossyReflections: 0
-    - _LinePos: 0.5
-    - _LineWidth: 0.01
     - _Metallic: 0
     - _Mode: 0
+    - _NoiseDensity: 1
+    - _NoiseIntensity: 0.75
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReceiveShadows: 1
+    - _ReceiveShadows: 0
+    - _RowDensity: 3
     - _SampleGI: 0
     - _Shininess: 0
-    - _Smoothness: 0.6
+    - _Smoothness: 0.5
     - _SmoothnessSource: 0
-    - _SmoothnessTextureChannel: 0
+    - _SmoothnessTextureChannel: 1
     - _SoftParticlesEnabled: 0
     - _SoftParticlesFarFadeDistance: 1
     - _SoftParticlesNearFadeDistance: 0
@@ -136,15 +146,16 @@ Material:
     - _WorkflowMode: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
+    - _BaseColor: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
     - _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.18867919, g: 0.18867919, b: 0.18867919, a: 1}
+    - _Color: {r: 0.51886785, g: 0.51886785, b: 0.51886785, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _LineColor: {r: 1, g: 1, b: 1, a: 0}
-    - _PenColor: {r: 0.0754717, g: 0.0754717, b: 0.0754717, a: 1}
+    - _FirstNoiseColor: {r: 1, g: 0.22772029, b: 0, a: 0.4745098}
+    - _SecondNoiseColor: {r: 0.7658384, g: 0.5690637, b: 0.8679245, a: 0.35686275}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
-    - _SpecColor: {r: 0, g: 0.42335856, b: 0.5660378, a: 1}
+    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _StoneColor: {r: 0.6792453, g: 0.4773941, b: 0.43253827, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &5512267772874898323
 MonoBehaviour:

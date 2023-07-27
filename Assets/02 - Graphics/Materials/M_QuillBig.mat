@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Quill
+  m_Name: M_QuillBig
   m_Shader: {fileID: -6465566751694194690, guid: 0ce0af8d7530d1643ac6222156c3713e,
     type: 3}
   m_Parent: {fileID: 0}
@@ -68,6 +68,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -112,7 +116,7 @@ Material:
     - _GlossinessSource: 0
     - _GlossyReflections: 0
     - _LinePos: 0.5
-    - _LineWidth: 0.01
+    - _LineWidth: 0.001
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -136,13 +140,13 @@ Material:
     - _WorkflowMode: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
+    - _BaseColor: {r: 0.13207549, g: 0, b: 0, a: 1}
     - _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.18867919, g: 0.18867919, b: 0.18867919, a: 1}
+    - _Color: {r: 0.13207546, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _LineColor: {r: 1, g: 1, b: 1, a: 0}
-    - _PenColor: {r: 0.0754717, g: 0.0754717, b: 0.0754717, a: 1}
+    - _LineColor: {r: 1, g: 0.82663155, b: 0.2783019, a: 0}
+    - _PenColor: {r: 0.23584908, g: 0, b: 0, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0, g: 0.42335856, b: 0.5660378, a: 1}
   m_BuildTextureStacks: []

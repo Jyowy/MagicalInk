@@ -50,9 +50,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   director: {fileID: 7074084206832438741}
   failedAnimation: {fileID: 11400000, guid: f0eddca44c2fd244e856f1bcbed65144, type: 2}
-  startAnimation: {fileID: 11400000, guid: 812163f4bbce2414da050ff83aa4de29, type: 2}
+  startAnimation: {fileID: 11400000, guid: 1fd0ff0b22f3c234bb0434398f84ae88, type: 2}
   loopAnimation: {fileID: 11400000, guid: 2d84d414002555b449bdbab1eacbff3a, type: 2}
-  endAnimation: {fileID: 11400000, guid: c853eb19ef90f5441a99a87f617169ae, type: 2}
+  endAnimation: {fileID: 11400000, guid: 556c07149eedf2b43ba3f5712dac0d36, type: 2}
   hasDuration: 1
   spellDuration: 60
   fairCastDurationFactor: 0.5

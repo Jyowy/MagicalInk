@@ -154,6 +154,7 @@ MonoBehaviour:
   relativeGrab: 1
   followPosition: 1
   followRotation: 0
+  stabilizeDrag: 0
   customGrabPoint: {fileID: 0}
   leftHandPositionOffset: {x: 0, y: 0, z: 0}
   rightHandPositionOffset: {x: 0, y: 0, z: 0}
@@ -180,8 +181,8 @@ MonoBehaviour:
   canvasRenderer: {fileID: 5077411966029702451}
   spellAnchorPoint: {fileID: 9167858969785484140}
   availableColor: {r: 1, g: 0.972549, b: 0.8901961, a: 1}
-  consumedColor: {r: 0.6226415, g: 0.6028168, b: 0.5433428, a: 1}
-  burnedColor: {r: 0.11320752, g: 0, b: 0, a: 1}
+  consumedColor: {r: 0.7924528, g: 0.7709594, b: 0.70647913, a: 1}
+  burnedColor: {r: 0.2264151, g: 0, b: 0, a: 1}
   resolution: 1024
   paintMethod: 1
   allowConnectedDots: 1

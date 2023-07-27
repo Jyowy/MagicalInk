@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Quill
+  m_Name: M_QuillSmall
   m_Shader: {fileID: -6465566751694194690, guid: 0ce0af8d7530d1643ac6222156c3713e,
     type: 3}
   m_Parent: {fileID: 0}
@@ -136,13 +136,13 @@ Material:
     - _WorkflowMode: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
+    - _BaseColor: {r: 0, g: 0.20754719, b: 0.010102273, a: 1}
     - _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.18867919, g: 0.18867919, b: 0.18867919, a: 1}
+    - _Color: {r: 0, g: 0.20754716, b: 0.010102273, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _LineColor: {r: 1, g: 1, b: 1, a: 0}
-    - _PenColor: {r: 0.0754717, g: 0.0754717, b: 0.0754717, a: 1}
+    - _LineColor: {r: 0.60784316, g: 1, b: 0.98859817, a: 0}
+    - _PenColor: {r: 0, g: 0.16352202, b: 0.18867922, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0, g: 0.42335856, b: 0.5660378, a: 1}
   m_BuildTextureStacks: []
